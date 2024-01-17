@@ -6,7 +6,7 @@ Step 1: IAM Configuration
 Create a user eks-admin with AdministratorAccess.
 Generate Security Credentials: Access Key and Secret Access Key.
 Step 2: EC2 Setup
-Launch an Ubuntu instance in your favourite region (eg. region us-west-2).
+Launch an Ubuntu instance in your favourite region (eg. region us-east-1).
 SSH into the instance from your local machine.
 Step 3: Install AWS CLI v2
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -29,8 +29,8 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
 Step 7: Setup EKS Cluster
-eksctl create cluster --name three-tier-cluster --region us-west-2 --node-type t2.medium --nodes-min 2 --nodes-max 2
-aws eks update-kubeconfig --region us-west-2 --name three-tier-cluster
+eksctl create cluster --name three-tier-cluster --region us-east-1 --node-type t2.medium --nodes-min 2 --nodes-max 2
+aws eks update-kubeconfig --region us-east-1 --name three-tier-cluster
 kubectl get nodes
 Step 8: Run Manifests
 kubectl create namespace workshop
@@ -39,8 +39,8 @@ kubectl delete -f .
 Step 9: Install AWS Load Balancer
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
 aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
-eksctl utils associate-iam-oidc-provider --region=us-west-2 --cluster=three-tier-cluster --approve
-eksctl create iamserviceaccount --cluster=three-tier-cluster --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::626072240565:policy/AWSLoadBalancerControllerIAMPolicy --approve --region=us-west-2
+eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=three-tier-cluster --approve
+eksctl create iamserviceaccount --cluster=three-tier-cluster --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::626072240565:policy/AWSLoadBalancerControllerIAMPolicy --approve --region=us-east-1
 Step 10: Deploy AWS Load Balancer Controller
 sudo snap install helm --classic
 helm repo add eks https://aws.github.io/eks-charts
